@@ -56,5 +56,37 @@ export const sampleLocations: MapLocation[] = [
     type: 'request',
     lat: 12.9716,
     lng: 77.5946
+  },
+  {
+    id: '7',
+    title: 'Wedding Feast Surplus',
+    description: 'Large quantity of catered food available',
+    type: 'donation',
+    lat: 26.9124,
+    lng: 75.7873
+  },
+  {
+    id: '8',
+    title: 'Grocery Store Daily Donation',
+    description: 'Fresh produce and bakery items',
+    type: 'donation',
+    lat: 22.5726,
+    lng: 88.3639
+  },
+  {
+    id: '9',
+    title: 'Orphanage Food Request',
+    description: 'Nutritious meals needed for 30 children',
+    type: 'request',
+    lat: 17.3850,
+    lng: 78.4867
+  },
+  {
+    id: '10',
+    title: 'Elderly Care Home',
+    description: 'Seeking soft food donations for seniors',
+    type: 'request',
+    lat: 13.0827,
+    lng: 80.2707
   }
 ];

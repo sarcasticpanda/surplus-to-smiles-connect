@@ -63,11 +63,20 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				donate: '#F97316', // Orange
-				request: '#10B981', // Green
+				// Custom color palette for Aahaar Setu
+				sustain: '#2E7D32', // Sustainability Green
+				warmth: '#F57C00', // Warmth Orange
+				trust: '#FFFFFF', // Trust White
+				mint: '#A5D6A7', // Soft Mint Green
+				peach: '#FFCC80', // Peach Glow
+				slate: '#455A64', // Slate Gray
+				cream: '#FFF8E1', // Cream Beige
+				bridge: '#4FC3F7', // Bridge Blue
+				donate: '#F57C00', // Same as warmth for consistency
+				request: '#2E7D32', // Same as sustain for consistency
 				bridge: {
-					light: '#FEF7CD', // Light yellow
-					dark: '#6E59A5', // Dark purple
+					light: '#FFF8E1', // Changed to Cream Beige
+					dark: '#2E7D32', // Changed to Sustainability Green
 				}
 			},
 			borderRadius: {
@@ -131,6 +140,11 @@ export default {
 			fontFamily: {
 				'poppins': ['Poppins', 'sans-serif'],
 				'devanagari': ['Noto Sans Devanagari', 'sans-serif']
+			},
+			backgroundImage: {
+				'hero-pattern': "url('https://images.unsplash.com/photo-1555939594-58d7cb561ad1?q=80&w=2787&auto=format&fit=crop')",
+				'community-pattern': "url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2940&auto=format&fit=crop')",
+				'food-pattern': "url('https://images.unsplash.com/photo-1498579687545-d5a4fffb0a9e?q=80&w=2940&auto=format&fit=crop')"
 			}
 		}
 	},
