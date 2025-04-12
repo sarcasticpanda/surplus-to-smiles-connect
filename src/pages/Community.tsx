@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar } from '@/components/ui/avatar';
 import { Textarea } from '@/components/ui/textarea';
-import { Calendar, ChevronRight, Clock, Heart, MessageCircle, ThumbsUp, Users } from 'lucide-react';
+import { Calendar, ChevronRight, Clock, Heart, MessageCircle, ThumbsUp, Users, MapPin } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 const Community = () => {
