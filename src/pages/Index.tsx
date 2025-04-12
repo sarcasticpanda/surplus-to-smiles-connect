@@ -8,12 +8,14 @@ import StatCard from '@/components/StatCard';
 import TestimonialCard from '@/components/TestimonialCard';
 import HowItWorksCard from '@/components/HowItWorksCard';
 import CallToActionButton from '@/components/CallToActionButton';
+import InteractiveMap from '@/components/InteractiveMap';
+import { sampleLocations } from '@/data/mapLocations';
 
 const Index = () => {
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Hero Section */}
-      <section className="relative py-20 px-4 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
+      {/* Hero Section with Enhanced Styling */}
+      <section className="relative py-20 px-4 bg-gradient-to-b from-blue-50 to-white overflow-hidden">
         <div className="absolute inset-0 bridge-pattern opacity-25"></div>
         <div className="container mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -41,7 +43,7 @@ const Index = () => {
                   Request Food
                 </CallToActionButton>
               </div>
-              <div className="bg-orange-100 border-l-4 border-donate p-4 rounded-md">
+              <div className="bg-orange-50 border-l-4 border-donate p-4 rounded-md shadow-sm">
                 <div className="flex items-start">
                   <Volume2 className="h-5 w-5 text-donate mr-2 mt-1" />
                   <div>
@@ -52,12 +54,13 @@ const Index = () => {
               </div>
             </div>
             <div className="relative lg:block animate-scale-in">
-              <div className="rounded-lg overflow-hidden shadow-xl">
+              <div className="rounded-2xl overflow-hidden shadow-2xl transform transition-transform hover:scale-[1.02] duration-500">
                 <img 
                   src="https://images.unsplash.com/photo-1591243315780-978fd00ff9db" 
                   alt="Diverse people sharing food" 
                   className="w-full h-auto object-cover rounded-lg"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-lg"></div>
               </div>
             </div>
           </div>
@@ -65,7 +68,7 @@ const Index = () => {
       </section>
 
       {/* Impact Stats Section */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className="py-16 px-4 bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">Our Real-Time Impact</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -101,8 +104,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Map Placeholder Section */}
-      <section className="py-16 px-4">
+      {/* Interactive Map Section */}
+      <section className="py-16 px-4 bg-gradient-to-b from-white to-blue-50">
         <div className="container mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Find Food Near You</h2>
@@ -110,28 +113,28 @@ const Index = () => {
               View real-time donations and requests in your area. Connect with donors and recipients to make a difference in your community.
             </p>
           </div>
-          <div className="bg-gray-200 rounded-lg h-[400px] flex items-center justify-center shadow-inner">
-            <div className="text-center">
-              <MapPin className="h-12 w-12 text-gray-500 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Interactive Map Coming Soon</h3>
-              <p className="text-gray-600 max-w-md mx-auto mb-6">
-                Our interactive map will show nearby food donation and request locations in real-time.
-              </p>
-              <div className="flex justify-center gap-4">
-                <Button variant="outline" className="flex items-center">
-                  View Donations <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-                <Button variant="outline" className="flex items-center">
-                  View Requests <ArrowRight className="h-4 w-4 ml-2" />
-                </Button>
-              </div>
-            </div>
+          <div className="rounded-lg shadow-xl overflow-hidden">
+            <InteractiveMap 
+              height="500px" 
+              locations={sampleLocations}
+              centerLat={20.5937}
+              centerLng={78.9629}
+              zoom={4}
+            />
+          </div>
+          <div className="flex justify-center gap-4 mt-8">
+            <Button variant="outline" className="flex items-center bg-white hover:bg-gray-50">
+              View Donations <ArrowRight className="h-4 w-4 ml-2" />
+            </Button>
+            <Button variant="outline" className="flex items-center bg-white hover:bg-gray-50">
+              View Requests <ArrowRight className="h-4 w-4 ml-2" />
+            </Button>
           </div>
         </div>
       </section>
 
       {/* How It Works Section */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className="py-16 px-4 bg-gradient-to-b from-blue-50 to-white">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-4">How It Works</h2>
           <p className="text-gray-600 text-center max-w-2xl mx-auto mb-12">
@@ -160,8 +163,8 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-16 px-4">
+      {/* Testimonials Section with Enhanced Styling */}
+      <section className="py-16 px-4 bg-gradient-to-b from-white to-blue-50">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12">What Our Community Says</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -186,7 +189,7 @@ const Index = () => {
           </div>
           <div className="text-center mt-10">
             <Link to="/community">
-              <Button variant="outline" className="flex items-center mx-auto">
+              <Button variant="outline" className="flex items-center mx-auto bg-white hover:bg-gray-50">
                 View More Stories <ArrowUpRight className="h-4 w-4 ml-2" />
               </Button>
             </Link>
@@ -194,26 +197,26 @@ const Index = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 px-4 bg-bridge-dark text-white">
+      {/* CTA Section with Enhanced Styling */}
+      <section className="py-16 px-4 bg-gradient-to-r from-bridge-dark to-purple-700 text-white">
         <div className="container mx-auto">
           <div className="text-center max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold mb-6">Ready to Make a Difference?</h2>
-            <p className="mb-8">
+            <p className="mb-8 text-white/90">
               Join our community today and help build bridges between surplus food and those who need it most. Together, we can reduce waste and hunger.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <CallToActionButton 
                 to="/donate" 
                 variant="donate" 
-                className="bg-white text-donate hover:bg-gray-100"
+                className="bg-white text-donate hover:bg-gray-100 shadow-lg hover:shadow-xl transition-shadow"
               >
                 Start Donating
               </CallToActionButton>
               <CallToActionButton 
                 to="/request" 
                 variant="request" 
-                className="bg-white text-request hover:bg-gray-100"
+                className="bg-white text-request hover:bg-gray-100 shadow-lg hover:shadow-xl transition-shadow"
               >
                 Request Food
               </CallToActionButton>

@@ -7,7 +7,9 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { ListFilter, MapPin } from 'lucide-react';
+import { ListFilter } from 'lucide-react';
+import InteractiveMap from '@/components/InteractiveMap';
+import { sampleLocations } from '@/data/mapLocations';
 
 const RequestFood = () => {
   return (
@@ -18,7 +20,7 @@ const RequestFood = () => {
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-1">
-            <Card className="p-6">
+            <Card className="p-6 shadow-lg border-0 bg-gradient-to-b from-white to-gray-50">
               <h2 className="font-semibold text-lg mb-4">Request Details</h2>
               <form>
                 <div className="space-y-6">
@@ -88,7 +90,7 @@ const RequestFood = () => {
                     <Label htmlFor="sms">Receive SMS alerts for new matching donations</Label>
                   </div>
                   
-                  <Button className="w-full bg-request text-white hover:bg-request/80">
+                  <Button className="w-full bg-request text-white hover:bg-request/80 shadow-md hover:shadow-lg transition-shadow">
                     Request Now
                   </Button>
                 </div>
@@ -105,19 +107,19 @@ const RequestFood = () => {
               </Button>
             </div>
             
-            <div className="bg-gray-200 rounded-lg h-[400px] flex items-center justify-center mb-6 shadow-inner">
-              <div className="text-center">
-                <MapPin className="h-12 w-12 text-gray-500 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Map View Coming Soon</h3>
-                <p className="text-gray-600 max-w-md mx-auto">
-                  You'll be able to view nearby donations on an interactive map.
-                </p>
-              </div>
+            <div className="rounded-lg overflow-hidden shadow-xl mb-6">
+              <InteractiveMap 
+                height="400px" 
+                locations={sampleLocations.filter(loc => loc.type === 'donation')}
+                centerLat={28.6139}
+                centerLng={77.2090}
+                zoom={10}
+              />
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[1, 2, 3, 4].map((item) => (
-                <Card key={item} className="p-4 hover:shadow-md transition-shadow">
+                <Card key={item} className="p-4 hover:shadow-md transition-shadow border border-gray-100 hover:border-gray-200 bg-white">
                   <div className="flex justify-between">
                     <div>
                       <span className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">2.5 km away</span>
@@ -134,7 +136,7 @@ const RequestFood = () => {
                     </div>
                   </div>
                   <div className="mt-3 flex justify-end">
-                    <Button variant="outline" size="sm">View Details</Button>
+                    <Button variant="outline" size="sm" className="hover:bg-gray-50">View Details</Button>
                   </div>
                 </Card>
               ))}
