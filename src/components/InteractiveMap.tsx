@@ -74,7 +74,6 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          className="saturate-[0.8] brightness-[1.03] contrast-[0.9]" // Soothing filter effect
         />
         
         {locations.map((location) => (
@@ -83,7 +82,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
             position={[location.lat, location.lng]} 
             icon={location.type === 'donation' ? donationIcon : requestIcon}
           >
-            <Popup className="rounded-md shadow-md">
+            <Popup>
               <div className="p-2">
                 <h3 className="font-medium text-base">{location.title}</h3>
                 <p className="text-sm text-slate mt-1">{location.description}</p>
