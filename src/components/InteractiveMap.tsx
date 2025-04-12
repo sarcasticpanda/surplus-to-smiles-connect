@@ -66,7 +66,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
   return (
     <div className="relative rounded-lg overflow-hidden shadow-lg" style={{ height }}>
       <MapContainer 
-        center={[centerLat, centerLng]} 
+        center={[centerLat, centerLng] as [number, number]} 
         zoom={zoom} 
         className="h-full w-full z-10" 
         scrollWheelZoom={false}
@@ -79,7 +79,7 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
         {locations.map((location) => (
           <Marker 
             key={location.id} 
-            position={[location.lat, location.lng]} 
+            position={[location.lat, location.lng] as [number, number]} 
             icon={location.type === 'donation' ? donationIcon : requestIcon}
           >
             <Popup>

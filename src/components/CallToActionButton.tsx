@@ -24,8 +24,8 @@ const CallToActionButton: React.FC<CallToActionButtonProps> = ({
       <Button
         className={cn(
           "px-6 py-6 h-auto text-lg font-medium rounded-lg shadow-lg transition-all duration-200 hover:scale-105",
-          variant === 'donate' && "bg-donate hover:bg-donate/90 text-white",
-          variant === 'request' && "bg-request hover:bg-request/90 text-white",
+          variant === 'donate' && "bg-warmth hover:bg-warmth/90 text-white", // #F57C00 (orange)
+          variant === 'request' && "bg-sustain hover:bg-sustain/90 text-white", // #2E7D32 (green)
           className
         )}
       >
