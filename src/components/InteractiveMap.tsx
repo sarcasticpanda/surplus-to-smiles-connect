@@ -1,8 +1,43 @@
 
-import React, { useEffect, useRef, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
+import React from 'react';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
 import { MapPin } from 'lucide-react';
+import { Icon, DivIcon } from 'leaflet';
+
+// Fix for default marker icons in Leaflet with React
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+let DefaultIcon = Icon.extend({
+  options: {
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  }
+});
+
+// Create custom icons for donation and request markers
+const donationIcon = new DivIcon({
+  className: '',
+  html: `<div class="flex items-center justify-center w-8 h-8 bg-warmth rounded-full border-2 border-white shadow-lg">
+          <span class="text-white text-xs">D</span>
+         </div>`,
+  iconSize: [32, 32],
+  iconAnchor: [16, 16]
+});
+
+const requestIcon = new DivIcon({
+  className: '',
+  html: `<div class="flex items-center justify-center w-8 h-8 bg-sustain rounded-full border-2 border-white shadow-lg">
+          <span class="text-white text-xs">R</span>
+         </div>`,
+  iconSize: [32, 32],
+  iconAnchor: [16, 16]
+});
 
 interface MapLocation {
   id: string;
@@ -28,177 +63,60 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
   centerLng = 78.9629,
   zoom = 4
 }) => {
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
-  const [mapboxToken, setMapboxToken] = useState<string>('');
-
-  useEffect(() => {
-    // For demo purposes - in a real app, this should be stored securely
-    const token = localStorage.getItem('mapbox_token');
-    if (token) {
-      setMapboxToken(token);
-    }
-  }, []);
-
-  const handleSaveToken = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.target as HTMLFormElement;
-    const input = form.elements.namedItem('token') as HTMLInputElement;
-    const token = input.value;
-    if (token) {
-      localStorage.setItem('mapbox_token', token);
-      setMapboxToken(token);
-    }
-  };
-
-  useEffect(() => {
-    if (!mapContainer.current || !mapboxToken) return;
-
-    // Initialize map
-    mapboxgl.accessToken = mapboxToken;
-    
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/light-v11',
-      center: [centerLng, centerLat],
-      zoom: zoom,
-      pitch: 45,
-      attributionControl: false
-    });
-
-    // Add navigation controls
-    map.current.addControl(
-      new mapboxgl.NavigationControl({
-        visualizePitch: true,
-      }),
-      'top-right'
-    );
-
-    // Add map atmosphere for a soothing look
-    map.current.on('style.load', () => {
-      if (map.current) {
-        map.current.addSource('donation-points', {
-          type: 'geojson',
-          data: {
-            type: 'FeatureCollection',
-            features: locations.map(loc => ({
-              type: 'Feature',
-              properties: {
-                id: loc.id,
-                title: loc.title,
-                description: loc.description,
-                type: loc.type
-              },
-              geometry: {
-                type: 'Point',
-                coordinates: [loc.lng, loc.lat]
-              }
-            }))
-          }
-        });
-
-        // Add donation points layer
-        map.current.addLayer({
-          id: 'donations',
-          type: 'circle',
-          source: 'donation-points',
-          filter: ['==', 'type', 'donation'],
-          paint: {
-            'circle-radius': 8,
-            'circle-color': '#F97316',
-            'circle-opacity': 0.8,
-            'circle-stroke-width': 2,
-            'circle-stroke-color': '#ffffff'
-          }
-        });
-
-        // Add request points layer
-        map.current.addLayer({
-          id: 'requests',
-          type: 'circle',
-          source: 'donation-points',
-          filter: ['==', 'type', 'request'],
-          paint: {
-            'circle-radius': 8,
-            'circle-color': '#10B981',
-            'circle-opacity': 0.8,
-            'circle-stroke-width': 2,
-            'circle-stroke-color': '#ffffff'
-          }
-        });
-
-        // Add click event to show popups
-        map.current.on('click', ['donations', 'requests'], (e) => {
-          if (!e.features || e.features.length === 0) return;
-          
-          const feature = e.features[0];
-          const coordinates = (feature.geometry as any).coordinates.slice();
-          const { title, description, type } = feature.properties;
-          
-          new mapboxgl.Popup()
-            .setLngLat(coordinates)
-            .setHTML(`
-              <strong>${title}</strong>
-              <p>${description}</p>
-              <span class="text-xs px-2 py-1 rounded-full ${
-                type === 'donation' ? 'bg-orange-100 text-orange-800' : 'bg-green-100 text-green-800'
-              }">
-                ${type === 'donation' ? 'Donation' : 'Request'}
-              </span>
-            `)
-            .addTo(map.current);
-        });
-        
-        map.current.on('mouseenter', ['donations', 'requests'], () => {
-          if (map.current) map.current.getCanvas().style.cursor = 'pointer';
-        });
-        
-        map.current.on('mouseleave', ['donations', 'requests'], () => {
-          if (map.current) map.current.getCanvas().style.cursor = '';
-        });
-      }
-    });
-
-    // Cleanup
-    return () => {
-      map.current?.remove();
-    };
-  }, [mapboxToken, centerLat, centerLng, zoom, locations]);
-
-  if (!mapboxToken) {
-    return (
-      <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-inner text-center">
-        <MapPin className="h-12 w-12 text-gray-500 mx-auto mb-4" />
-        <h3 className="text-xl font-semibold mb-4">Please Enter Your Mapbox Token</h3>
-        <p className="text-gray-600 max-w-md mx-auto mb-6">
-          To use the interactive map, you need to enter your Mapbox public token. 
-          Get one for free at <a href="https://mapbox.com/" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">mapbox.com</a>.
-        </p>
-        <form onSubmit={handleSaveToken} className="flex flex-col gap-4">
-          <input 
-            type="text" 
-            name="token" 
-            placeholder="Enter your Mapbox public token" 
-            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-bridge-dark"
-            required
-          />
-          <button 
-            type="submit" 
-            className="bg-bridge-dark text-white px-4 py-2 rounded-md hover:bg-opacity-90"
-          >
-            Save Token
-          </button>
-        </form>
-      </div>
-    );
-  }
-
   return (
     <div className="relative rounded-lg overflow-hidden shadow-lg" style={{ height }}>
-      <div ref={mapContainer} className="absolute inset-0" />
+      <MapContainer 
+        center={[centerLat, centerLng]} 
+        zoom={zoom} 
+        className="h-full w-full z-10" 
+        scrollWheelZoom={false}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          className="saturate-[0.8] brightness-[1.03] contrast-[0.9]" // Soothing filter effect
+        />
+        
+        {locations.map((location) => (
+          <Marker 
+            key={location.id} 
+            position={[location.lat, location.lng]} 
+            icon={location.type === 'donation' ? donationIcon : requestIcon}
+          >
+            <Popup className="rounded-md shadow-md">
+              <div className="p-2">
+                <h3 className="font-medium text-base">{location.title}</h3>
+                <p className="text-sm text-slate mt-1">{location.description}</p>
+                <span 
+                  className={`text-xs px-2 py-1 mt-2 inline-block rounded-full ${
+                    location.type === 'donation' 
+                      ? 'bg-orange-100 text-orange-800' 
+                      : 'bg-green-100 text-green-800'
+                  }`}
+                >
+                  {location.type === 'donation' ? 'Donation' : 'Request'}
+                </span>
+              </div>
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+      
       <div className="absolute inset-0 pointer-events-none rounded-lg" style={{ 
         background: 'linear-gradient(180deg, rgba(255,255,255,0) 80%, rgba(255,255,255,1) 100%)' 
       }} />
+      
+      {/* Legend */}
+      <div className="absolute bottom-4 right-4 bg-white/90 px-4 py-2 rounded-md shadow-md z-20 flex gap-4 items-center border border-mint/30">
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded-full bg-warmth"></div>
+          <span className="text-xs">Donations</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded-full bg-sustain"></div>
+          <span className="text-xs">Requests</span>
+        </div>
+      </div>
     </div>
   );
 };
